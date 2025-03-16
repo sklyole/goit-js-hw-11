@@ -9,18 +9,17 @@ export function clearGallery() {
   gallery.innerHTML = '';
 }
 
+export function hideLoader() {
+  document.querySelector('.loader').classList.add('visually-hidden');
+}
+
+export function showLoader() {
+  document.querySelector('.loader').classList.remove('visually-hidden');
+}
+
 export function renderGallery(images) {
   const gallery = document.querySelector('.gallery');
-
-  if (images.length === 0) {
-    iziToast.error({
-      title: 'Error',
-      message:
-        'Sorry, there are no images matching your search query. Please try again!',
-    });
-    return;
-  }
-
+  hideLoader();
   const galleryMarkup = images
     .map(
       ({
@@ -52,12 +51,4 @@ export function renderGallery(images) {
 
   const lightbox = new SimpleLightbox('.gallery a');
   lightbox.refresh();
-}
-
-export function showLoader() {
-  document.querySelector('.loader').classList.add('visually-hidden');
-}
-
-export function hideLoader() {
-  document.querySelector('.loader').classList.remove('visually-hidden');
 }

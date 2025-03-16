@@ -13,20 +13,19 @@ const form = document.querySelector('form');
 const input = document.querySelector("input[name='search-text']");
 const gallery = document.querySelector('.gallery');
 const loader = document.querySelector('.loader');
-const errorMessage = {
-  title: 'Error',
-  message:
-    'Sorry, there are no images matching your search query. Please try again!',
-  position: 'topRight',
-  backgroundColor: '#ef7975',
-};
 
 form.addEventListener('submit', event => {
   event.preventDefault();
-  const query = input.value.trim();
 
-  if (!query) {
-    iziToast.show(errorMessage);
+  const query = input.value.trim();
+  if (query === '') {
+    iziToast.show({
+      title: 'Error',
+      message: 'Please enter a search query!',
+      position: 'topRight',
+      backgroundColor: '#ef7975',
+    });
+
     return;
   }
 
@@ -35,8 +34,16 @@ form.addEventListener('submit', event => {
 
   getData(query)
     .then(images => {
+      hideLoader();
+
       if (images.length === 0) {
-        iziToast.show(errorMessage);
+        iziToast.show({
+          title: 'Error',
+          message:
+            'Sorry, there are no images matching your search query. Please try again!',
+          position: 'topRight',
+          backgroundColor: '#ef7975',
+        });
         return;
       }
 
@@ -44,13 +51,15 @@ form.addEventListener('submit', event => {
     })
 
     .catch(() => {
+      hideLoader();
       iziToast.show({
         title: 'Error',
         message: 'Something went wrong! Please try again later.',
+        position: 'topRight',
+        backgroundColor: '#ef7975',
       });
     })
     .finally(() => {
-      hideLoader();
       form.reset();
     });
 });
